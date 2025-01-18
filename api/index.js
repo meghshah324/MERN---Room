@@ -22,6 +22,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/user',userRouter);
 app.use('/api/auth',authRouter);
 
+app.use((err,req,res,next) => {
+   const statusCode = err.statusCode || 500;
+   const messsage = err.message || 'Internal Server Error';
+   return res.status(statusCode).json({
+     success : false,
+     statusCode,
+     messsage
+   });
+});
+
 app.listen(3000, () => {
-  console.log("Sever is Running on port 3000!");
+  console.log(`Server running on port ${3000}`);
+}).on('error', (err) => {
+  console.error('Failed to start server:', err.message);
 });
